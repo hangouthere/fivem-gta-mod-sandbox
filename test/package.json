@@ -1,0 +1,23 @@
+{
+  "name": "sandbox-mod",
+  "version": "2.0.0",
+  "description": "A sandbox to work out modding ideas",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run clearbuild && npm run typecheck && node build/build-bundle.js",
+    "clearbuild": "rimraf ./_dist",
+    "typecheck": "tsc --noEmit -p client/tsconfig.json && tsc --noEmit -p server/tsconfig.json",
+    "watch": "npm run clearbuild && cross-env IS_WATCH_MODE=1 node build/build-bundle.js"
+  },
+  "author": "CodexHere",
+  "license": "MIT",
+  "devDependencies": {
+    "@citizenfx/client": "^2.0.6124-1",
+    "@citizenfx/server": "^2.0.6124-1",
+    "@types/node": "^16.18.3",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.16.3",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.9.4"
+  }
+}

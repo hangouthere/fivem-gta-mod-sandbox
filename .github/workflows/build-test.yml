@@ -1,0 +1,25 @@
+name: Build Test
+on: [push, pull_request]
+
+defaults:
+  run:
+    working-directory: ./test
+
+jobs:
+  build-test:
+    name: Build Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
+      - name: Install dependencies NUI
+        run: yarn install --frozen-lockfile
+      - name: Build Bundles
+        run: yarn build
+
