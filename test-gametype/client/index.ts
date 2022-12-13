@@ -1,6 +1,12 @@
-import { RandomPedModel } from './AllPeds.js';
-import { Me } from './PlayerMap.js';
-import { Chat, SpawnCoords } from './Utils.js';
+import './commands.js';
+import { EnablePvP, RandomPedModel } from './Peds.js';
+import { Me, UpdatePlayerMaps } from './PlayerMap.js';
+import { ArrayRandom, Chat, Delay, SpawnCoords } from './Utils.js';
+
+setTick(async () => {
+  UpdatePlayerMaps();
+  await Delay(100);
+});
 
 const WELCOMES = [
   'Welcome to the party,',
@@ -19,20 +25,13 @@ const SpawnOpts = {
 };
 
 const onSpawn = async (spawnCoords: SpawnCoords) => {
-  const chosenMsg = WELCOMES[Math.floor(Math.random() * WELCOMES.length)];
-
+  const chosenMsg = ArrayRandom(WELCOMES);
   const me = Me();
 
-  TaskGoStraightToCoord(
-    me.ped,
-    spawnCoords.x - 1,
-    spawnCoords.y - 3,
-    spawnCoords.z,
-    1.3,
-    5000,
-    spawnCoords.heading!,
-    0
-  );
+  TaskGoStraightToCoord(me.ped, spawnCoords.x - 1, spawnCoords.y - 3, spawnCoords.z, 1.3, -1, spawnCoords.heading!, 0);
+  SetPedKeepTask(me.ped, true);
+
+  EnablePvP(me.ped, true);
 
   Chat(`${chosenMsg} ${me.name}`);
 };
@@ -51,7 +50,7 @@ const gameTypeSetup = () => {
   });
 
   globalThis.exports.spawnmanager.setAutoSpawn(true);
-  // globalThis.exports.spawnmanager.forceRespawn();
+  globalThis.exports.spawnmanager.forceRespawn();
 
   console.log('Mod Restarted:', new Date());
 };

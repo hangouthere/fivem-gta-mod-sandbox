@@ -25,6 +25,8 @@ export type SpawnCoords = Vector3 & {
 
 export const Delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
+export const ArrayRandom = <T>(list: Array<T>) => list[Math.floor(Math.random() * list.length)];
+
 export const LoadModel = async (hashId: number) => {
   // Request the model and wait until the game has loaded it
   RequestModel(hashId);
