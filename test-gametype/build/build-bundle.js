@@ -1,29 +1,30 @@
-const esbuild = require("esbuild");
+const esbuild = require('esbuild');
 
 const IS_WATCH_MODE = process.env.IS_WATCH_MODE;
 
 const TARGET_ENTRIES = [
   {
-    target: "node16",
-    entryPoints: ["server/server.ts"],
-    platform: "node",
-    outfile: "./_dist/server/server.js",
+    target: 'node16',
+    entryPoints: ['server/server.ts'],
+    platform: 'node',
+    outfile: './_dist/server/server.js'
   },
   {
-    target: "es2020",
-    entryPoints: ["client/client.ts"],
-    outfile: "./_dist/client/client.js",
-  },
+    target: 'node16',
+    entryPoints: ['client/client.ts'],
+    platform: 'node',
+    outfile: './_dist/client/client.js'
+  }
 ];
 
 const buildBundle = async () => {
   try {
     const baseOptions = {
-      logLevel: "info",
+      logLevel: 'info',
       bundle: true,
-      charset: "utf8",
+      charset: 'utf8',
       minifyWhitespace: true,
-      absWorkingDir: process.cwd(),
+      absWorkingDir: process.cwd()
     };
 
     for (const targetOpts of TARGET_ENTRIES) {
@@ -32,15 +33,9 @@ const buildBundle = async () => {
       if (IS_WATCH_MODE) {
         mergedOpts.watch = {
           onRebuild(error) {
-            if (error)
-              console.error(
-                `[ESBuild Watch] (${targetOpts.entryPoints[0]}) Failed to rebuild bundle`
-              );
-            else
-              console.log(
-                `[ESBuild Watch] (${targetOpts.entryPoints[0]}) Sucessfully rebuilt bundle`
-              );
-          },
+            if (error) console.error(`[ESBuild Watch] (${targetOpts.entryPoints[0]}) Failed to rebuild bundle`);
+            else console.log(`[ESBuild Watch] (${targetOpts.entryPoints[0]}) Sucessfully rebuilt bundle`);
+          }
         };
       }
 
@@ -52,7 +47,7 @@ const buildBundle = async () => {
       }
     }
   } catch (e) {
-    console.log("[ESBuild] Build failed with error");
+    console.log('[ESBuild] Build failed with error');
     console.error(e);
     process.exit(1);
   }

@@ -4,10 +4,14 @@
   "description": "A sandbox to work out modding ideas",
   "main": "index.js",
   "scripts": {
-    "build": "npm run clearbuild && npm run typecheck && node build/build-bundle.js",
-    "clearbuild": "rimraf ./_dist",
+    "prewatch": "npm i",
+    "prebuild": "npm i",
+    "build": "npm run clean && npm run typecheck && node build/build-bundle.js",
+    "clean": "rimraf ./_dist",
     "typecheck": "tsc --noEmit -p client/tsconfig.json && tsc --noEmit -p server/tsconfig.json",
-    "watch": "npm run clearbuild && cross-env IS_WATCH_MODE=1 node build/build-bundle.js"
+    "watch": "npm run clean && concurrently -r 'npm:watch:*'",
+    "watch:source": "cross-env IS_WATCH_MODE=1 node build/build-bundle.js",
+    "watch:bundle": "nodemon --delay 3 -e js,json --watch _dist/**/* --exec \"rcon -c 'restart test-gametype' localhost:30120 $RCON_PASSWORD\""
   },
   "author": "CodexHere",
   "license": "MIT",
@@ -15,8 +19,10 @@
     "@citizenfx/client": "^2.0.6124-1",
     "@citizenfx/server": "^2.0.6124-1",
     "@types/node": "^16.18.3",
+    "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
     "esbuild": "^0.16.3",
+    "nodemon": "^2.0.20",
     "rimraf": "^3.0.2",
     "typescript": "^4.9.4"
   }
