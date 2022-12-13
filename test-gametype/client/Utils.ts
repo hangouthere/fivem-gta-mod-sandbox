@@ -6,13 +6,21 @@ export type PlayerInfo = {
 };
 
 export type PlayerIdMap = Record<number, PlayerInfo>;
+export type PlayerPedMap = Record<number, PlayerInfo>;
 export type PlayerNameMap = Record<string, PlayerInfo>;
 
-export type SpawnCoords = {
+export type Vector3 = {
   x: number;
   y: number;
   z: number;
-  heading?: number;
+};
+
+export type Coords = Vector3 & {
+  heading: Vector3;
+};
+
+export type SpawnCoords = Vector3 & {
+  heading: number;
 };
 
 export const Delay = (ms: number) => new Promise(res => setTimeout(res, ms));
@@ -52,4 +60,11 @@ export const GetPedOrVehId = (pedId: number) => {
   const isInVehicle = IsPedInAnyVehicle(pedId, false);
 
   return isInVehicle ? GetVehiclePedIsUsing(pedId) : pedId;
+};
+
+export const GetCoords = (pedId: number) => {
+  const [x, y, z] = GetEntityCoords(pedId, true);
+  const [hZ, hX, hY] = GetEntityRotation(pedId, 2);
+
+  return { x, y, z, heading: { x: hX, y: hY, z: hZ } } as Coords;
 };

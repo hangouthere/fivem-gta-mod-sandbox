@@ -1,4 +1,7 @@
+import { PlayerIdMap, PlayerInfo, PlayerNameMap, PlayerPedMap } from './Utils.js';
+
 export let playerIdMap: PlayerIdMap;
+export let playerPedMap: PlayerPedMap;
 export let playerNameMap: PlayerNameMap;
 
 const BuildPlayerList = (): PlayerInfo[] => {
@@ -12,23 +15,39 @@ const BuildPlayerList = (): PlayerInfo[] => {
   }));
 };
 
-const BuildPlayerIdMap = (playerList: PlayerInfo[]) =>
-  playerList.reduce((list, player) => {
-    list[player.id] = player;
-    return list;
-  }, {} as PlayerIdMap);
+const BuildMaps = (playerList: PlayerInfo[]) => {
+  playerIdMap = {};
+  playerPedMap = {};
+  playerNameMap = {};
 
-const BuildPlayerNameMap = (playerList: PlayerInfo[]): Record<number, PlayerInfo> =>
-  playerList.reduce((list, player) => {
-    list[player.name.toLowerCase()] = player;
-    return list;
-  }, {} as PlayerNameMap);
-
-export const UpdatePlayerMaps = () => {
-  const players = BuildPlayerList();
-
-  playerIdMap = BuildPlayerIdMap(players);
-  playerNameMap = BuildPlayerNameMap(players);
+  playerList.forEach(player => {
+    playerIdMap[player.id] = player;
+    playerPedMap[player.ped] = player;
+    playerNameMap[player.name.toLowerCase()] = player;
+  });
 };
 
-import { PlayerIdMap, PlayerInfo, PlayerNameMap } from './utils.js';
+export const ValidatePlayer = (target: string) => {
+  if (!target) {
+    console.error('Missing Player');
+    return false;
+  }
+
+  const selfPedId = PlayerPedId();
+  const targetPlayer = playerNameMap[target.toLowerCase()];
+
+  if (!targetPlayer) {
+    console.error('Invalid Player!');
+    return false;
+  }
+
+  if (selfPedId == targetPlayer.ped) {
+    console.error("You can't teleport to yourself!");
+    return false;
+  }
+
+  return targetPlayer;
+};
+
+export const UpdatePlayerMaps = () => BuildMaps(BuildPlayerList());
+export const Me = () => playerPedMap[PlayerPedId()];
