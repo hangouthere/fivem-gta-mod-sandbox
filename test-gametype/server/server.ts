@@ -1,1 +1,1 @@
-console.log('Server Script Load')
+console.log('Server Script Loaded');

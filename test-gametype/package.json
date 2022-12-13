@@ -6,12 +6,12 @@
   "scripts": {
     "prewatch": "npm i",
     "prebuild": "npm i",
-    "build": "npm run clean && npm run typecheck && node build/build-bundle.js",
+    "build": "npm run clean && npm run typecheck && node .scripts/build-bundle.js",
     "clean": "rimraf ./_dist",
     "typecheck": "tsc --noEmit -p client/tsconfig.json && tsc --noEmit -p server/tsconfig.json",
     "watch": "npm run clean && concurrently -r 'npm:watch:*'",
-    "watch:source": "cross-env IS_WATCH_MODE=1 node build/build-bundle.js",
-    "watch:bundle": "nodemon --delay 3 -e js,json --watch _dist/**/* --exec \"rcon -c 'restart test-gametype' localhost:30120 $RCON_PASSWORD > /dev/null && echo 'Restarted Resource'\""
+    "watch:source": "cross-env IS_WATCH_MODE=1 node .scripts/build-bundle.js",
+    "watch:bundle": "nodemon --delay 3 -e js,json --watch _dist/**/* --exec \".scripts/rcon-restart.sh\""
   },
   "author": "CodexHere",
   "license": "MIT",

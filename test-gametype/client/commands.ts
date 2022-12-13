@@ -12,7 +12,9 @@ RegisterCommand(
 RegisterCommand(
   'wantme',
   async (_source: number, args: string[], _raw: string) => {
-    SetPlayerWantedLevel(Me().id, 4, false);
+    const me = Me();
+    SetPlayerWantedLevel(me.id, 4, false);
+    SetPlayerWantedLevelNow(me.id, false);
   },
   false
 );
