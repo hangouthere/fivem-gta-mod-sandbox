@@ -1,4 +1,4 @@
-import { PlayerIdMap, PlayerInfo, PlayerNameMap, PlayerPedMap } from './Utils.js';
+import { PlayerIdMap, PlayerInfo, PlayerNameMap, PlayerPedMap } from './Peds.js';
 
 export let playerIdMap: PlayerIdMap;
 export let playerPedMap: PlayerPedMap;

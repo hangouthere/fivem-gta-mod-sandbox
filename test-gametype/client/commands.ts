@@ -2,6 +2,35 @@ import { Me, playerNameMap, ValidatePlayer } from './PlayerMap.js';
 import { Alert, Chat, GetCoords, GetPedOrVehId, LoadModel } from './Utils.js';
 
 RegisterCommand(
+  'pedinfo',
+  async (_source: number, args: string[], _raw: string) => {
+    const me = Me();
+
+    console.log('Player IDs', me.id, me.ped, me.serverId);
+    console.log('DoesEntityExist?', DoesEntityExist(me.id), DoesEntityExist(me.ped), DoesEntityExist(me.serverId));
+    console.log('IsPlayerDead?', IsPlayerDead(me.id), IsPlayerDead(me.ped), IsPlayerDead(me.serverId));
+    console.log('IsEntityDead?', IsEntityDead(me.id), IsEntityDead(me.ped), IsEntityDead(me.serverId));
+    console.log('IsPedAPlayer?', IsPedAPlayer(me.id), IsPedAPlayer(me.ped), IsPedAPlayer(me.serverId));
+    console.log('IsPedHuman?', IsPedHuman(me.id), IsPedHuman(me.ped), IsPedHuman(me.serverId));
+    console.log('IsEntityAttached?', IsEntityAttached(me.id), IsEntityAttached(me.ped), IsEntityAttached(me.serverId));
+    console.log('IsEntityVisible?', IsEntityVisible(me.id), IsEntityVisible(me.ped), IsEntityVisible(me.serverId));
+    console.log(
+      'IsPlayerControlOn?',
+      IsPlayerControlOn(me.id),
+      IsPlayerControlOn(me.ped),
+      IsPlayerControlOn(me.serverId)
+    );
+    console.log(
+      'NetworkIsPlayerActive?',
+      NetworkIsPlayerActive(me.id),
+      NetworkIsPlayerActive(me.ped),
+      NetworkIsPlayerActive(me.serverId)
+    );
+  },
+  false
+);
+
+RegisterCommand(
   'showstat',
   async (_source: number, args: string[], _raw: string) => {
     const [statHash] = args;
