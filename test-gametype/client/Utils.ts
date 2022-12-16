@@ -1,61 +1,43 @@
-export type Vector3 = {
-  x: number;
-  y: number;
-  z: number;
-};
+import { Entity, Game, Ped, Vector2, Vector3 } from '@nativewrappers/client';
 
-export type Coords = Vector3 & {
-  heading: Vector3;
-};
-
-export type SpawnCoords = Vector3 & {
-  heading: number;
-};
-
-export const Delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+// Misc -----------------------------------------------------------------------------------------
 
 export const ArrayRandom = <T>(list: Array<T>) => list[Math.floor(Math.random() * list.length)];
 
-export const LoadModel = async (hashId: number) => {
-  // Request the model and wait until the game has loaded it
-  RequestModel(hashId);
+export const RandBetween = (min: number = 0, max: number = Number.MAX_SAFE_INTEGER) =>
+  Math.random() * (max - min) + min;
 
-  while (!HasModelLoaded(hashId)) {
-    await Delay(100);
-  }
+export const Clamp = (num: number, min: number, max: number) => (num <= min ? min : num >= max ? max : num);
+
+// Cfx -----------------------------------------------------------------------------------------
+
+const JobStoppers: Function[] = [];
+
+export const StopAllJobs = () => {
+  JobStoppers.forEach(stopper => stopper());
 };
 
-export const Chat = (msg: string | string[]) => {
-  console.log(msg);
+export const Jobify = (jobFunc: Function) => {
+  let jobId = setTick(jobFunc);
 
-  emit('chat:addMessage', {
-    args: Array.isArray(msg) ? msg : [msg]
-  });
+  const stopJob = () => {
+    if (!jobId) return;
+    clearTick(jobId);
+    jobId = 0;
+  };
+
+  JobStoppers.push(stopJob);
+
+  return stopJob;
 };
 
-export const Alert = (msg: string) => {
-  console.info(msg);
-  SetTextComponentFormat('STRING');
-  AddTextComponentString(msg);
-  DisplayHelpTextFromStringLabel(0, false, true, -1);
-};
+export type SuggestionParam = { name: string; help: string };
+export const addSuggestion = (commandName: string, description: string, params?: SuggestionParam[], prefix = '/') =>
+  emit('chat:addSuggestion', `${prefix}${commandName}`, description, params);
+export const removeSuggestion = (commandName: string, prefix = '/') =>
+  emit('chat:removeSuggestion', `${prefix}${commandName}`);
 
-export const Notify = (msg: string) => {
-  console.info(msg);
-  SetNotificationTextEntry('STRING');
-  AddTextComponentString(msg);
-  DrawNotification(true, false);
-};
+// wrapper ---------------------------------------------------------------------------------------
 
-export const GetPedOrVehId = (pedId: number) => {
-  const isInVehicle = IsPedInAnyVehicle(pedId, false);
+export const Vector3To2 = (vec: Vector3) => new Vector2(vec.x, vec.y);
 
-  return isInVehicle ? GetVehiclePedIsUsing(pedId) : pedId;
-};
-
-export const GetCoords = (pedId: number) => {
-  const [x, y, z] = GetEntityCoords(pedId, true);
-  const [hZ, hX, hY] = GetEntityRotation(pedId, 2);
-
-  return { x, y, z, heading: { x: hX, y: hY, z: hZ } } as Coords;
-};

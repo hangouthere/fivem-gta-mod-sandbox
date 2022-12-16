@@ -1,16 +1,5 @@
 import { ArrayRandom } from './Utils.js';
 
-export type PlayerInfo = {
-  id: number;
-  serverId: number;
-  name: string;
-  ped: number;
-};
-
-export type PlayerIdMap = Record<number, PlayerInfo>;
-export type PlayerPedMap = Record<number, PlayerInfo>;
-export type PlayerNameMap = Record<string, PlayerInfo>;
-
 const AllPeds = [
   'a_f_y_hipster_01',
   'a_m_y_hipster_01',
@@ -25,8 +14,3 @@ const AllPeds = [
 ];
 
 export const RandomPedModel = () => ArrayRandom(AllPeds);
-
-export const EnablePvP = (pedId: number, enable: boolean) => {
-  SetCanAttackFriendly(pedId, enable, enable);
-  NetworkSetFriendlyFireOption(enable);
-};
