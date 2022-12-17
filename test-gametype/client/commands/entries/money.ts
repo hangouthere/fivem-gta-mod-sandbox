@@ -1,8 +1,8 @@
 import { Wait } from '@nativewrappers/client';
-import { Chat } from '../../Messaging.js';
-import { Jobify } from '../../Utils.js';
+import { JobManager } from '../../utils/Jobs.js';
+import { Chat } from '../../utils/Messaging.js';
 
-export {};
+export { };
 
 let stopJob: Function | null;
 const command = async () => {
@@ -17,7 +17,7 @@ const command = async () => {
     return;
   }
 
-  stopJob = Jobify(async () => {
+  stopJob = JobManager.RegisterGlobalJob(async () => {
     Chat('showing money');
     SetMultiplayerBankCash();
     SetMultiplayerWalletCash();

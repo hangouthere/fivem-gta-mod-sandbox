@@ -1,7 +1,8 @@
 import { Game, Vector3 } from '@nativewrappers/client';
-import { Chat } from './Messaging.js';
-import { RandomPedModel } from './Peds.js';
-import { ArrayRandom, StopAllJobs } from './Utils.js';
+import { RandomPedModel } from './utils/Entities.js';
+import { JobManager } from './utils/Jobs.js';
+import { Chat } from './utils/Messaging.js';
+import { ArrayRandom } from './utils/Misc';
 import { Register } from './whatami/index.js';
 
 const WELCOMES = [
@@ -65,7 +66,7 @@ on('onResourceStop', (resourceName: string) => {
     return;
   }
 
-  StopAllJobs();
+  JobManager.StopAllGlobalJobs();
 
   console.log(`The resource ${resourceName} has been stopped.`);
 });

@@ -1,6 +1,6 @@
 import { Color, Entity, Game, Ped, Point, Prop, Vehicle, World } from '@nativewrappers/client';
-import { getAllPickups } from '../Utils/Entities.js';
-import { FovScaledParams, GetFovScaledParams } from '../Utils/Text';
+import { getAllPickups } from '../utils/Entities.js';
+import { FovScaledParams, GetFovScaledParams } from '../utils/Text';
 import { isInViewDistance, quickTextParams, WAIOptions, WAIShowState } from './helpers.js';
 
 // TODO: Make configurable
