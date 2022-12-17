@@ -1,7 +1,7 @@
 import { Color, Entity, Game } from '@nativewrappers/client';
-import { Chat } from '../Messaging.js';
-import { Clamp } from '../Utils.js';
-import { DrawOnScreen3D, FovScaledParams } from '../Utils/Text';
+import { Chat } from '../utils/Messaging.js';
+import { Clamp } from '../utils/Misc';
+import { DrawOnScreen3D, FovScaledParams } from '../utils/Text';
 import { IsActive } from './index.js';
 
 export enum WAIShowState {

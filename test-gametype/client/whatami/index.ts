@@ -1,6 +1,5 @@
-import { Wait } from '@nativewrappers/client';
-import { Chat } from '../Messaging.js';
-import { addSuggestion, Jobify, removeSuggestion } from '../Utils.js';
+import { JobManager } from '../utils/Jobs.js';
+import { addSuggestion, Chat, removeSuggestion } from '../utils/Messaging.js';
 import {
   adjustViewDistance,
   changeViewDistanceIncrementer,
@@ -10,13 +9,14 @@ import {
 } from './helpers.js';
 import { drawText } from './job.js';
 
-let stopJobDraw: Function | null;
-
 export let IsActive: Boolean = false;
+let jobMgr: JobManager | null;
 
 export const Register = async () => {
   IsActive = true;
-  stopJobDraw = Jobify(drawText);
+  jobMgr = new JobManager();
+
+  jobMgr.registerJob(drawText);
 
   RegisterCommand('whatami_vdi', changeViewDistanceIncrementer, false);
   addSuggestion('whatami_vdi', 'Set the View Distance incrementer.', [
@@ -51,31 +51,45 @@ export const Register = async () => {
   RegisterCommand('-wai_settings_reset', resetOptions, false);
   RegisterKeyMapping('-wai_settings_reset', 'Reset [WhatAmI] Settings to Defaults', 'keyboard', 'NUMPAD5');
 
-  for await (const name of [
-    'wai_view_type_left',
-    'wai_view_type_right',
-    'wai_viewdist_min_inc',
-    'wai_viewdist_min_dec',
-    'wai_viewdist_max_inc',
-    'wai_viewdist_max_dec',
-    'wai_viewdist_inc_inc',
-    'wai_viewdist_inc_dec',
-    'wai_settings_reset'
-  ]) {
-    addSuggestion(name, 'SECRET_SAUCE', [], '-');
-    await Wait(100);
-    removeSuggestion(name, '-');
-  }
+  clearCommands();
 
   Chat('--------------------------------------');
   Chat('[WhatAmI] Enabled!');
   Chat("  Be sure you've set up the keybinds for this Resource or you won't have much use out of it!");
 };
 
-export const Unregister = () => {
-  if (stopJobDraw) stopJobDraw();
+const clearCommands = () => {
+  const stopThisJob = jobMgr!.registerJob(async () => {
+    const allCmds = [
+      '-wai_view_type_left',
+      '-wai_view_type_right',
+      '-wai_viewdist_min_inc',
+      '-wai_viewdist_min_dec',
+      '-wai_viewdist_max_inc',
+      '-wai_viewdist_max_dec',
+      '-wai_viewdist_inc_inc',
+      '-wai_viewdist_inc_dec',
+      '-wai_settings_reset'
+    ];
 
-  stopJobDraw = null;
+    for (let idx = 0; idx < allCmds.length; idx++) {
+      const name = allCmds[idx];
+      addSuggestion(name, 'SECRET_SAUCE');
+      // await Wait(2000);
+      Chat(`Undid ${name}`);
+      removeSuggestion(name);
+    }
+
+    stopThisJob();
+  });
+};
+
+export const Unregister = () => {
+  if (jobMgr) {
+    jobMgr.stopAllJobs();
+  }
+
+  jobMgr = null;
   IsActive = false;
 
   removeSuggestion('whatami_vdi');

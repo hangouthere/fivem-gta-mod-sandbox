@@ -1,5 +1,6 @@
 import { Game, Vector3 } from '@nativewrappers/client';
-import { addSuggestion, RandBetween } from '../../Utils.js';
+import { addSuggestion } from '../../utils/Messaging.js';
+import { RandBetween } from '../../utils/Misc';
 
 const command = async (_source: number, args: string[], _raw: string) => {
   Game.PlayerPed.Health = -100;

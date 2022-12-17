@@ -19,3 +19,8 @@ export const Notify = (msg: string) => {
   AddTextComponentString(msg);
   DrawNotification(true, false);
 };
+
+export type SuggestionParam = { name: string; help: string };
+export const addSuggestion = (commandName: string, description: string, params?: SuggestionParam[]) =>
+  emit('chat:addSuggestion', `/${commandName}`, description, params);
+export const removeSuggestion = (commandName: string) => emit('chat:removeSuggestion', `/${commandName}`);

@@ -1,5 +1,5 @@
 import { Game } from '@nativewrappers/client';
-import { addSuggestion } from '../../Utils.js';
+import { addSuggestion } from '../../utils/Messaging.js';
 
 const command = async (_source: number, args: string[], _raw: string) => {
   console.log('Player IDs', Game.Player.Handle, Game.PlayerPed.Handle, Game.Player.ServerId);

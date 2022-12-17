@@ -1,4 +1,4 @@
-import { addSuggestion } from '../../Utils.js';
+import { addSuggestion } from '../../utils/Messaging.js';
 
 export {};
 

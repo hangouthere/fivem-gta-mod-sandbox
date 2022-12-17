@@ -1,5 +1,5 @@
 import { Game } from '@nativewrappers/client';
-import { addSuggestion } from '../../Utils.js';
+import { addSuggestion } from '../../utils/Messaging.js';
 
 const command = async (_source: number, args: string[], _raw: string) => {
   const level = parseInt(args[0]) ?? 5;

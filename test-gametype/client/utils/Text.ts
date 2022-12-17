@@ -1,5 +1,5 @@
 import { Alignment, Color, Font, GameplayCamera, Point, Screen, Size, Text, Vector3 } from '@nativewrappers/client';
-import { Clamp } from '../Utils';
+import { Clamp } from './Misc';
 
 // Text -----------------------------------------------------------------------------------------
 

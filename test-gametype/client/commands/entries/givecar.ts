@@ -1,5 +1,5 @@
 import { Game, Maths, Model, Vehicle, VehicleHash, VehicleSeat, World } from '@nativewrappers/client';
-import { Chat } from '../../Messaging.js';
+import { Chat } from '../../utils/Messaging.js';
 
 const command = async (_source: number, args: string[], _raw: string) => {
   const modelName = args[0];

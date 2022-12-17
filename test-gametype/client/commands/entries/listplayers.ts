@@ -1,6 +1,5 @@
 import { Game } from '@nativewrappers/client';
-import { Chat } from '../../Messaging.js';
-import { addSuggestion } from '../../Utils.js';
+import { addSuggestion, Chat } from '../../utils/Messaging.js';
 
 const command = async (_source: number, _args: string[], _raw: string) => {
   Chat(`Players Online: (${GetNumberOfPlayers()})`);

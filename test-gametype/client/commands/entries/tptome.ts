@@ -1,7 +1,6 @@
 import { Game, Ped, VehicleSeat } from '@nativewrappers/client';
-import { Alert, Chat } from '../../Messaging.js';
-import { addSuggestion } from '../../Utils.js';
-import { GetPedOrVehEntity, GetPlayerByName } from '../../Utils/Entities.js';
+import { GetPedOrVehEntity, GetPlayerByName } from '../../utils/Entities.js';
+import { addSuggestion, Alert, Chat } from '../../utils/Messaging.js';
 
 const command = async (_source: number, args: string[], _raw: string) => {
   const [targetPlayerName] = args;
