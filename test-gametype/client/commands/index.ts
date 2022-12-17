@@ -3,7 +3,7 @@ import './entries/givecar.js';
 import './entries/jog.js';
 import './entries/killme.js';
 import './entries/listplayers.js';
-import './entries/money.js';
+import './entries/misc-hud.js';
 import './entries/pedinfo.js';
 import './entries/setrot.js';
 import './entries/statset.js';

@@ -1,9 +1,7 @@
 import { Game, Vector3 } from '@nativewrappers/client';
 import { RandomPedModel } from './utils/Entities.js';
-import { JobManager } from './utils/Jobs.js';
 import { Chat } from './utils/Messaging.js';
 import { ArrayRandom } from './utils/Misc';
-import { Register } from './whatami/index.js';
 
 const WELCOMES = [
   'Welcome to the party,',
@@ -40,7 +38,7 @@ const onSpawn = async () => {
   Chat(`${chosenMsg} ${Game.Player.Name}`);
 };
 
-export const GameTypeSetup = () => {
+const setupSpawner = () => {
   globalThis.exports.spawnmanager.setAutoSpawnCallback(() => {
     const pedModel = RandomPedModel();
 
@@ -56,17 +54,11 @@ export const GameTypeSetup = () => {
 
   globalThis.exports.spawnmanager.setAutoSpawn(true);
   // globalThis.exports.spawnmanager.forceRespawn();
-  Register();
-
-  console.log('Mod Restarted:', new Date());
 };
 
-on('onResourceStop', (resourceName: string) => {
-  if (GetCurrentResourceName() != resourceName) {
-    return;
-  }
+export const bootstrapGameType = () => {
+  setupSpawner();
+  // Register();
 
-  JobManager.StopAllGlobalJobs();
-
-  console.log(`The resource ${resourceName} has been stopped.`);
-});
+  console.log('[Sandbox] Mod Started:', new Date());
+};

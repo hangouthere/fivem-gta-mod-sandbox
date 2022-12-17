@@ -14,9 +14,16 @@ export type StopJobFunction = Function;
 export class JobManager {
   /*
   Static Methods
-*/
+  */
 
   protected static jobStoppers: Function[] = [];
+
+  /**
+   * Gets the number of jobs registered
+   */
+  public static get numJobs() {
+    return this.jobStoppers.length;
+  }
 
   /**
    * Register a Global Job.
@@ -35,7 +42,7 @@ export class JobManager {
   ): StopJobFunction {
     let jobId = setTick(async () => {
       // Prestart delay
-      if (delayStart && -1 > autoDelay) {
+      if (delayStart && -1 < autoDelay) {
         await Wait(Number(autoDelay));
       }
 
@@ -43,7 +50,7 @@ export class JobManager {
       await jobFunc();
 
       // Post delay
-      if (false === delayStart && -1 > autoDelay) {
+      if (false === delayStart && -1 < autoDelay) {
         await Wait(Number(autoDelay));
       }
     });

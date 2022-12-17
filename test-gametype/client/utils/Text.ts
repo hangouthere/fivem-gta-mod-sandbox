@@ -1,8 +1,6 @@
 import { Alignment, Color, Font, GameplayCamera, Point, Screen, Size, Text, Vector3 } from '@nativewrappers/client';
 import { Clamp } from './Misc';
 
-// Text -----------------------------------------------------------------------------------------
-
 export type MinMax = {
   min: number;
   max: number;

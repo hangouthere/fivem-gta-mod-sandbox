@@ -59,29 +59,25 @@ export const Register = async () => {
 };
 
 const clearCommands = () => {
-  const stopThisJob = jobMgr!.registerJob(async () => {
-    const allCmds = [
-      '-wai_view_type_left',
-      '-wai_view_type_right',
-      '-wai_viewdist_min_inc',
-      '-wai_viewdist_min_dec',
-      '-wai_viewdist_max_inc',
-      '-wai_viewdist_max_dec',
-      '-wai_viewdist_inc_inc',
-      '-wai_viewdist_inc_dec',
-      '-wai_settings_reset'
-    ];
+  const stopThisJob = jobMgr!.registerJob(
+    async () => {
+      [
+        '-wai_view_type_left',
+        '-wai_view_type_right',
+        '-wai_viewdist_min_inc',
+        '-wai_viewdist_min_dec',
+        '-wai_viewdist_max_inc',
+        '-wai_viewdist_max_dec',
+        '-wai_viewdist_inc_inc',
+        '-wai_viewdist_inc_dec',
+        '-wai_settings_reset'
+      ].forEach(removeSuggestion);
 
-    for (let idx = 0; idx < allCmds.length; idx++) {
-      const name = allCmds[idx];
-      addSuggestion(name, 'SECRET_SAUCE');
-      // await Wait(2000);
-      Chat(`Undid ${name}`);
-      removeSuggestion(name);
-    }
-
-    stopThisJob();
-  });
+      stopThisJob();
+    },
+    500,
+    true
+  );
 };
 
 export const Unregister = () => {
