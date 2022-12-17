@@ -1,4 +1,4 @@
-import { Entity, Game, Ped, Vector2, Vector3 } from '@nativewrappers/client';
+import { Vector2, Vector3, Wait } from '@nativewrappers/client';
 
 // Misc -----------------------------------------------------------------------------------------
 
@@ -17,8 +17,18 @@ export const StopAllJobs = () => {
   JobStoppers.forEach(stopper => stopper());
 };
 
-export const Jobify = (jobFunc: Function) => {
-  let jobId = setTick(jobFunc);
+export const Jobify = (jobFunc: Function, autoDelay: number = -1, delayStart: boolean = false) => {
+  let jobId = setTick(async () => { 
+    if (delayStart && -1 > autoDelay) {
+      await Wait(Number(autoDelay));
+    }
+
+    await jobFunc();
+
+    if (false === delayStart && -1 > autoDelay) {
+      await Wait(Number(autoDelay));
+    }
+  });
 
   const stopJob = () => {
     if (!jobId) return;
@@ -40,4 +50,3 @@ export const removeSuggestion = (commandName: string, prefix = '/') =>
 // wrapper ---------------------------------------------------------------------------------------
 
 export const Vector3To2 = (vec: Vector3) => new Vector2(vec.x, vec.y);
-

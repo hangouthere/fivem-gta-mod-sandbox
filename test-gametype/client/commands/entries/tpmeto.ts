@@ -1,4 +1,4 @@
-import { Game } from '@nativewrappers/client';
+import { Game, Vehicle, VehicleSeat } from '@nativewrappers/client';
 import { Alert, Chat } from '../../Messaging.js';
 import { addSuggestion } from '../../Utils.js';
 import { GetPedOrVehEntity, GetPlayerByName } from '../../Utils/Entities.js';
@@ -15,7 +15,17 @@ const command = async (_source: number, args: string[], _raw: string) => {
 
   Alert(`Teleporting ${Game.Player.Name} to ${targetPlayer.Name}!`);
 
-  Game.PlayerPed.Position = targetEntity.Position;
+  // FIXME: Needs Cfx update!
+  if (IsEntityAPed(targetEntity.Handle)) {
+    Game.PlayerPed.Position = targetEntity.Position.addY(1);
+  } else {
+    const ent = targetEntity as Vehicle;
+    if (ent.isSeatFree(VehicleSeat.Any)) {
+      Game.PlayerPed.setIntoVehicle(ent, VehicleSeat.Any);
+    } else {
+      Chat(`${targetPlayer.Name} is in a Vehicle without an available seat!`);
+    }
+  }
 };
 
 RegisterCommand('tpmeto', command, false);
