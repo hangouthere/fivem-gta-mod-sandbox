@@ -1,7 +1,8 @@
 import { Color, Entity, Game, Ped, Point, Prop, Vehicle, World } from '@nativewrappers/client';
 import { getAllPickups } from '../utils/Entities.js';
 import { FovScaledParams, GetFovScaledParams } from '../utils/Text';
-import { isInViewDistance, quickTextParams, WAIOptions, WAIShowState } from './helpers.js';
+import { isInViewDistance, WAIOptions, WAIShowState } from './Options.js';
+import { quickTextParams } from './Text';
 
 // TODO: Make configurable
 const lightColor = new Color(255, 255, 0, 255);

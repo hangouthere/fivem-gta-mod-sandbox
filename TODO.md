@@ -10,6 +10,7 @@ Add build proc as another container, use docker-compose profiles
 # WhatAmI
 
 * Needs more cleanup from prototype
+* Identify
 * Clean up text generation functions
   * They feel too tied to the impl, needs to be generic enough to apply FOV text to any entity easily... Close, but not quite there yet
 * Identify a better way to visualize targeted entity

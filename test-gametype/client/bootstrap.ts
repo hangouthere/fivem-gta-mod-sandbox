@@ -2,6 +2,7 @@ import { Game, Vector3 } from '@nativewrappers/client';
 import { RandomPedModel } from './utils/Entities.js';
 import { Chat } from './utils/Messaging.js';
 import { ArrayRandom } from './utils/Misc';
+import { Register as RegisterWhatAmI } from './whatami/index.js';
 
 const WELCOMES = [
   'Welcome to the party,',
@@ -56,9 +57,9 @@ const setupSpawner = () => {
   // globalThis.exports.spawnmanager.forceRespawn();
 };
 
-export const bootstrapGameType = () => {
+export const bootstrapGameType = async () => {
   setupSpawner();
-  // Register();
+  RegisterWhatAmI();
 
   console.log('[Sandbox] Mod Started:', new Date());
 };

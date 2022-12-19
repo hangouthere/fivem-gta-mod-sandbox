@@ -1,13 +1,13 @@
 import { JobManager } from '../utils/Jobs.js';
 import { addSuggestion, Chat, removeSuggestion } from '../utils/Messaging.js';
+import { drawText } from './Jobs.js';
 import {
   adjustViewDistance,
   changeViewDistanceIncrementer,
   resetOptions,
   rotateShowState,
   WAIOptions
-} from './helpers.js';
-import { drawText } from './job.js';
+} from './Options.js';
 
 export let IsActive: Boolean = false;
 let jobMgr: JobManager | null;
