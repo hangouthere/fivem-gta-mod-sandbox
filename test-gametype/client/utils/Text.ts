@@ -1,10 +1,5 @@
 import { Alignment, Color, Font, GameplayCamera, Point, Screen, Size, Text, Vector3 } from '@nativewrappers/client';
-import { Clamp } from './Misc';
-
-export type MinMax = {
-  min: number;
-  max: number;
-};
+import { Clamp, MinMax } from './Misc';
 
 export type LineSettings = {
   height: number;

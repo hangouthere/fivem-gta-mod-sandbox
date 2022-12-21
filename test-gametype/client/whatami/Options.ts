@@ -2,6 +2,7 @@ import { Entity, Game } from '@nativewrappers/client';
 import { Chat } from '../utils/Messaging.js';
 import { Clamp } from '../utils/Misc';
 import { IsActive } from './index.js';
+import { job_detectInView } from './Jobs.js';
 
 export enum WAIShowState {
   Peds,
@@ -10,27 +11,27 @@ export enum WAIShowState {
   Vehicles
 }
 
+//TODO: Fix these b0rked testing defaults
 const DEFAULT_OPTS = {
-  showState: WAIShowState.Peds,
+  showState: WAIShowState.Props,
   distance: {
     min: 0,
-    max: 5000,
+    max: 100,
     // max: 10,
     // incrementer: 5
     incrementer: 100
   },
   bounds: {
     min: 0,
-    max: 5000
-    // max: 500
+    max: 1000
   },
   alpha: {
-    min: 100 / 255,
+    min: 0 / 255,
     max: 255 / 255
   },
   fontScale: {
-    min: 0.3,
-    max: 0.4
+    min: 0.25,
+    max: 0.45
   },
   textSettings: {
     height: 5,
@@ -70,6 +71,8 @@ export const adjustViewDistance = (offset: number = 1, isMax = true) => {
       : WAIOptions.distance.max - absOffset //inner-max
   );
 
+  job_detectInView();
+
   Chat(`[WhatAmI] ${label} View Distance set to ${WAIOptions.distance[maxOrMin]} (${offset})`);
 };
 
@@ -97,6 +100,9 @@ export const rotateShowState = (forward: boolean) => {
   }[prevState];
 
   WAIOptions.showState = nextState;
+
+  job_detectInView();
+
   Chat(
     `[WhatAmI] Tracking ${WAIShowState[nextState]} between ${WAIOptions.distance.min} and ${WAIOptions.distance.max} units`
   );

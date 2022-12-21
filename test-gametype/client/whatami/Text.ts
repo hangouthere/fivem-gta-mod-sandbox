@@ -3,10 +3,11 @@ import { DrawOnScreen3D, FovScaledParams } from '../utils/Text';
 import { WAIOptions } from './Options';
 
 /*ignores next block (aka function)*/
-// prettier-ignore
 const commonTextParams = (entity: Entity, pedDistance: number, color: string) => [
   `${color}Hash(ID):~b~ ${entity.Model.Hash} ~w~(~t~${entity.Handle}~w~)`,
-  `${color}Coords:~b~ ${entity.Position.x.toFixed(3)} ~t~/~b~ ${entity.Position.y.toFixed(3)} ~t~/~b~ ${entity.Position.z.toFixed(3)}`,
+  `${color}Coords:~b~ ${entity.Position.x.toFixed(3)} ~t~/~b~ ${entity.Position.y.toFixed(
+    3
+  )} ~t~/~b~ ${entity.Position.z.toFixed(3)}`,
   `${color}Distance:~b~ ${pedDistance.toFixed(3)}`
 ];
 

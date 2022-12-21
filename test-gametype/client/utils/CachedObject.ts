@@ -1,4 +1,4 @@
-const MemoCache: Record<string, HashStore> = {};
+const MemoCache: Map<string, HashStore> = new Map();
 
 type HashStore = {
   value: any;
@@ -10,7 +10,7 @@ class CacheProxyHandler<T extends object> {
 
   private storeCache(hashedKey: string, value: any) {
     const cacheVal = { value };
-    MemoCache[hashedKey] = cacheVal;
+    MemoCache.set(hashedKey, cacheVal);
     return cacheVal;
   }
 
@@ -20,7 +20,7 @@ class CacheProxyHandler<T extends object> {
     // Actual proxied call
     (...args: any[]) => {
       const subKey = `${hashedKey}-${this.subKey}`;
-      let returnVal: any = MemoCache[subKey];
+      let returnVal: any = MemoCache.get(subKey);
 
       // Cache Miss, call and store!
       if (!returnVal) {
@@ -34,7 +34,7 @@ class CacheProxyHandler<T extends object> {
     const hashedKey = `${targetObj[this.idKey]}-${String(key)}`;
     const targetProp = targetObj[key as keyof T];
     const isFunc = 'function' === typeof targetProp;
-    let returnVal: any = MemoCache[hashedKey];
+    let returnVal: any = MemoCache.get(hashedKey);
 
     // Cache miss
     if (!returnVal) {
@@ -51,10 +51,21 @@ class CacheProxyHandler<T extends object> {
     return returnVal.value;
   }
 
-  clearCache(targetObj: T, property: keyof T) {
+  // Clear all cache for a target object
+  clearCache(targetObj: T) {
+    const hashedStart = `${targetObj[this.idKey]}`;
+    for (let key of Object.keys(MemoCache)) {
+      if (key.startsWith(hashedStart)) {
+        MemoCache.delete(key);
+      }
+    }
+  }
+
+  // Clear a specific hashed key value for a target object
+  clearPropCache(targetObj: T, property: keyof T) {
     const hashedKey = `${targetObj[this.idKey]}-${String(property)}`;
-    delete MemoCache[hashedKey];
-    delete MemoCache[`${hashedKey}-${this.subKey}`];
+    MemoCache.delete(hashedKey);
+    MemoCache.delete(`${hashedKey}-${this.subKey}`);
   }
 }
 
@@ -64,11 +75,12 @@ export class CachedObject<T extends object> {
 
   private handler: CacheProxyHandler<T>;
 
-  constructor(original: T, idKey: string) {
+  constructor(original: T, idKey: keyof T) {
     this.original = original;
     this.handler = new CacheProxyHandler<T>(idKey as keyof T);
     this.cached = new Proxy<T>(this.original, this.handler);
   }
 
-  clearCache = (property: keyof T) => this.handler.clearCache(this.cached, property);
+  clearCache = () => this.handler.clearCache(this.cached);
+  clearPropCache = (property: keyof T) => this.handler.clearPropCache(this.cached, property);
 }
