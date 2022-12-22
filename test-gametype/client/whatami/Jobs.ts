@@ -1,4 +1,17 @@
-import { Color, Entity, Game, Ped, Point, Prop, Vehicle, World } from '@nativewrappers/client';
+import {
+  Color,
+  Container,
+  Entity,
+  Game,
+  Ped,
+  Point,
+  Prop,
+  Screen,
+  Size,
+  Text,
+  Vehicle,
+  World
+} from '@nativewrappers/client';
 import { CachedEntity } from '../utils/CacheableEntities/test.js';
 import { getAllPickups } from '../utils/Entities.js';
 import { JobManager } from '../utils/Jobs.js';
@@ -33,7 +46,8 @@ export const StartJobs = () => {
   job_clearCommands();
   jobMgr.registerJob(job_detectInView, 5000);
   jobMgr.registerJob(job_detectOnScreen, 20);
-  jobMgr.registerJob(job_drawText);
+  jobMgr.registerJob(job_drawEntityInfo);
+  jobMgr.registerJob(job_drawStats);
 };
 
 export const StopJobs = () => {
@@ -94,8 +108,6 @@ export const job_detectInView = async () => {
 
     entitiesInViewDist.push(entCache);
   }
-
-  console.log(`Ent in View Dist: ${entitiesInViewDist.length}/${entityList.length}`);
 };
 
 export const job_detectOnScreen = async () => {
@@ -127,11 +139,9 @@ export const job_detectOnScreen = async () => {
       entityCache
     });
   }
-
-  console.log(`Ent on Screen: ${entitiesOnScreen.length}/${entitiesInViewDist.length}`);
 };
 
-const job_drawText = async () => {
+const job_drawEntityInfo = async () => {
   let zOffsetLight = 0,
     radiusLight = 10,
     offsetScaleVector: FovScaledParams;
@@ -231,4 +241,20 @@ const job_drawText = async () => {
       0
     );
   }
+};
+
+const containerSize = new Size(300, 50);
+const statsContainer = new Container(
+  new Point(Screen.ScaledWidth - containerSize.width, Screen.Height - containerSize.height),
+  containerSize,
+  new Color(75, 0, 0, 0)
+);
+const statEntitiesTotal = new Text('', new Point(5, 0), 0.5);
+const statEntitiesOnScreen = new Text('', new Point(5, 20), 0.5);
+statsContainer.addItem(statEntitiesTotal);
+statsContainer.addItem(statEntitiesOnScreen);
+const job_drawStats = async () => {
+  statEntitiesTotal.caption = 'Entities in View Distance: ' + entitiesInViewDist.length;
+  statEntitiesOnScreen.caption = 'Entities on screen: ' + entitiesOnScreen.length;
+  statsContainer.draw();
 };
