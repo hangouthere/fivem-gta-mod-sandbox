@@ -12,7 +12,7 @@ const TARGET_ENTRIES = [
   {
     target: 'node16',
     entryPoints: ['client/index.ts'],
-    platform: 'node',
+    platform: 'browser',
     outfile: './_dist/client/client.js'
   }
 ];

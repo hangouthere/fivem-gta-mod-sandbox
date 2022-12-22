@@ -2,25 +2,35 @@
 # yarn lockfile v1
 
 
-"@citizenfx/client@^2.0.6124-1":
-  "integrity" "sha512-V688R2klrrxS65rNwFOqTy8KMlbiZFsFKxLqrqtQNQOIKyphaeehbF6Qm+CU3OWayB9NoF9RIcBMSGSIfSt6UQ=="
-  "resolved" "https://registry.npmjs.org/@citizenfx/client/-/client-2.0.6124-1.tgz"
-  "version" "2.0.6124-1"
+"@citizenfx/client@^2.0.6136-1":
+  "integrity" "sha512-uNB9PtpsrHERgkZHfHECfcDFzIMPqCUal8oSm8ANoHmsw8N4bGD3+DtI7jruVJmb7bPCnI+lopjfZG/44cqvZA=="
+  "resolved" "https://registry.npmjs.org/@citizenfx/client/-/client-2.0.6136-1.tgz"
+  "version" "2.0.6136-1"
 
-"@citizenfx/server@^2.0.6124-1":
-  "integrity" "sha512-IDlII8OSK+Yi4cdCL6xloxJ2HsicKyh+XyE+k21NHGGURB46iCEb/DihpJ8gG3vEjvXGNxpWxBpOmnc1+p2tqg=="
-  "resolved" "https://registry.npmjs.org/@citizenfx/server/-/server-2.0.6124-1.tgz"
-  "version" "2.0.6124-1"
+"@citizenfx/server@^2.0.6136-1":
+  "integrity" "sha512-+jP65khOC4m3nU8qlfcC6IYJcglPcIa+pmwQxvkTutFZGCk82AjxkuEGeJCMZUXMMVJ+Zrs9cTLytgdNlXAghw=="
+  "resolved" "https://registry.npmjs.org/@citizenfx/server/-/server-2.0.6136-1.tgz"
+  "version" "2.0.6136-1"
 
-"@esbuild/linux-x64@0.16.4":
-  "integrity" "sha512-N55Q0mJs3Sl8+utPRPBrL6NLYZKBCLLx0bme/+RbjvMforTGGzFvsRl4xLTZMUBFC1poDzBEPTEu5nxizQ9Nlw=="
-  "resolved" "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.16.4.tgz"
-  "version" "0.16.4"
+"@esbuild/linux-x64@0.16.5":
+  "integrity" "sha512-vsOwzKN+4NenUTyuoWLmg5dAuO8JKuLD9MXSeENA385XucuOZbblmOMwwgPlHsgVRtSjz38riqPJU2ALI/CWYQ=="
+  "resolved" "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.16.5.tgz"
+  "version" "0.16.5"
+
+"@nativewrappers/client@^1.7.33":
+  "integrity" "sha512-phuBBGdDPxZiZyw5CaFs1XWfvllnEtwATMdLaNucwMofVg/O/FjlP1bTUq4SOm4qhSZ4Zdo351ijHzBSIbZs6g=="
+  "resolved" "https://registry.npmjs.org/@nativewrappers/client/-/client-1.7.33.tgz"
+  "version" "1.7.33"
+
+"@nativewrappers/fivem-server@^0.0.14":
+  "integrity" "sha512-Fspgpj4f/PdfpJa/ORjNUq4TnGtBc7XuKWllLaqKxPbllOiEEjmSRIGt2bATPMU9ylxwYSjbFJIWVerfhK70Zw=="
+  "resolved" "https://registry.npmjs.org/@nativewrappers/fivem-server/-/fivem-server-0.0.14.tgz"
+  "version" "0.0.14"
 
 "@types/node@^16.18.3":
-  "integrity" "sha512-TrpoNiaPvBH5h8rQQenMtVsJXtGsVBRJrcp2Ik6oEt99jHfGvDLh20VTTq3ixTbjYujukYz1IlY4N8a8yfY0jA=="
-  "resolved" "https://registry.npmjs.org/@types/node/-/node-16.18.8.tgz"
-  "version" "16.18.8"
+  "integrity" "sha512-nhrqXYxiQ+5B/tPorWum37VgAiefi/wmfJ1QZKGKKecC8/3HqcTTJD0O+VABSPwtseMMF7NCPVT9uGgwn0YqsQ=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-16.18.9.tgz"
+  "version" "16.18.9"
 
 "abbrev@1":
   "integrity" "sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q=="
@@ -169,33 +179,33 @@
   "resolved" "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz"
   "version" "8.0.0"
 
-"esbuild@^0.16.3":
-  "integrity" "sha512-qQrPMQpPTWf8jHugLWHoGqZjApyx3OEm76dlTXobHwh/EBbavbRdjXdYi/GWr43GyN0sfpap14GPkb05NH3ROA=="
-  "resolved" "https://registry.npmjs.org/esbuild/-/esbuild-0.16.4.tgz"
-  "version" "0.16.4"
+"esbuild@^0.16.5":
+  "integrity" "sha512-te0zG5CDzAxhnBKeddXUtK8xDnYL6jv100ekldhtUk0ALXPXcDAtuH0fAR7rbKwUdz3bOey6HVq2N+aWCKZ1cw=="
+  "resolved" "https://registry.npmjs.org/esbuild/-/esbuild-0.16.5.tgz"
+  "version" "0.16.5"
   optionalDependencies:
-    "@esbuild/android-arm" "0.16.4"
-    "@esbuild/android-arm64" "0.16.4"
-    "@esbuild/android-x64" "0.16.4"
-    "@esbuild/darwin-arm64" "0.16.4"
-    "@esbuild/darwin-x64" "0.16.4"
-    "@esbuild/freebsd-arm64" "0.16.4"
-    "@esbuild/freebsd-x64" "0.16.4"
-    "@esbuild/linux-arm" "0.16.4"
-    "@esbuild/linux-arm64" "0.16.4"
-    "@esbuild/linux-ia32" "0.16.4"
-    "@esbuild/linux-loong64" "0.16.4"
-    "@esbuild/linux-mips64el" "0.16.4"
-    "@esbuild/linux-ppc64" "0.16.4"
-    "@esbuild/linux-riscv64" "0.16.4"
-    "@esbuild/linux-s390x" "0.16.4"
-    "@esbuild/linux-x64" "0.16.4"
-    "@esbuild/netbsd-x64" "0.16.4"
-    "@esbuild/openbsd-x64" "0.16.4"
-    "@esbuild/sunos-x64" "0.16.4"
-    "@esbuild/win32-arm64" "0.16.4"
-    "@esbuild/win32-ia32" "0.16.4"
-    "@esbuild/win32-x64" "0.16.4"
+    "@esbuild/android-arm" "0.16.5"
+    "@esbuild/android-arm64" "0.16.5"
+    "@esbuild/android-x64" "0.16.5"
+    "@esbuild/darwin-arm64" "0.16.5"
+    "@esbuild/darwin-x64" "0.16.5"
+    "@esbuild/freebsd-arm64" "0.16.5"
+    "@esbuild/freebsd-x64" "0.16.5"
+    "@esbuild/linux-arm" "0.16.5"
+    "@esbuild/linux-arm64" "0.16.5"
+    "@esbuild/linux-ia32" "0.16.5"
+    "@esbuild/linux-loong64" "0.16.5"
+    "@esbuild/linux-mips64el" "0.16.5"
+    "@esbuild/linux-ppc64" "0.16.5"
+    "@esbuild/linux-riscv64" "0.16.5"
+    "@esbuild/linux-s390x" "0.16.5"
+    "@esbuild/linux-x64" "0.16.5"
+    "@esbuild/netbsd-x64" "0.16.5"
+    "@esbuild/openbsd-x64" "0.16.5"
+    "@esbuild/sunos-x64" "0.16.5"
+    "@esbuild/win32-arm64" "0.16.5"
+    "@esbuild/win32-ia32" "0.16.5"
+    "@esbuild/win32-x64" "0.16.5"
 
 "escalade@^3.1.1":
   "integrity" "sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw=="
