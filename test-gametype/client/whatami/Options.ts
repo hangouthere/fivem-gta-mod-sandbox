@@ -43,7 +43,7 @@ const DEFAULT_OPTS = {
 export let WAIOptions = JSON.parse(JSON.stringify(DEFAULT_OPTS)) as typeof DEFAULT_OPTS;
 
 export const isInViewDistance = (cacher: CachedEntity): [boolean, number] => {
-  const dist = Game.PlayerPed.Position.distance(cacher.cached.Position);
+  const dist = Game.PlayerPed.Position.distance(cacher.original.Position);
   const isInViewDistance = dist >= WAIOptions.distance.min && dist <= WAIOptions.distance.max;
 
   return [isInViewDistance, dist];

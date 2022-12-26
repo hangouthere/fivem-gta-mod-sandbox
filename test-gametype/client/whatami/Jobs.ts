@@ -44,10 +44,10 @@ export const StartJobs = () => {
   jobMgr = new JobManager();
 
   job_clearCommands();
-  jobMgr.registerJob(job_detectInView, 1000);
+  jobMgr.registerJob(job_drawStats);
+  jobMgr.registerJob(job_detectInView, 100);
   jobMgr.registerJob(job_detectOnScreen, 30);
   jobMgr.registerJob(job_drawEntityInfo);
-  jobMgr.registerJob(job_drawStats);
 };
 
 export const StopJobs = () => {
@@ -59,25 +59,19 @@ export const StopJobs = () => {
 };
 
 const job_clearCommands = () => {
-  const stopJob = jobMgr!.registerJob(
-    () => {
-      [
-        '-wai_view_type_left',
-        '-wai_view_type_right',
-        '-wai_viewdist_min_inc',
-        '-wai_viewdist_min_dec',
-        '-wai_viewdist_max_inc',
-        '-wai_viewdist_max_dec',
-        '-wai_viewdist_inc_inc',
-        '-wai_viewdist_inc_dec',
-        '-wai_settings_reset'
-      ].forEach(removeSuggestion);
-    },
-    1000,
-    true
-  );
-
-  stopJob();
+  setTimeout(() => {
+    [
+      '-wai_view_type_left',
+      '-wai_view_type_right',
+      '-wai_viewdist_min_inc',
+      '-wai_viewdist_min_dec',
+      '-wai_viewdist_max_inc',
+      '-wai_viewdist_max_dec',
+      '-wai_viewdist_inc_inc',
+      '-wai_viewdist_inc_dec',
+      '-wai_settings_reset'
+    ].forEach(removeSuggestion);
+  }, 1000);
 };
 
 export const job_detectInView = async () => {
@@ -251,17 +245,23 @@ const job_drawEntityInfo = async () => {
   }
 };
 
-const containerSize = new Size(500, 150);
+const lineHeight = 20;
+const containerSize = new Size(500, 500);
 const statsContainer = new Container(
-  new Point(Screen.ScaledWidth - containerSize.width, Screen.Height - containerSize.height),
+  new Point(Screen.ScaledWidth - containerSize.width - 5, Screen.Height - containerSize.height - 5),
   containerSize,
   new Color(75, 0, 0, 0)
 );
-const statEntitiesTotal = new Text('', new Point(5, 0), 0.5);
-const statEntitiesOnScreen = new Text('', new Point(5, 20), 0.5);
+const statViewMode = new Text('', new Point(5, lineHeight * 0), 0.5);
+const statEntitiesTotal = new Text('', new Point(5, lineHeight * 1), 0.5);
+const statEntitiesOnScreen = new Text('', new Point(5, lineHeight * 2), 0.5);
+statsContainer.addItem(statViewMode);
 statsContainer.addItem(statEntitiesTotal);
 statsContainer.addItem(statEntitiesOnScreen);
+
 const job_drawStats = async () => {
+  statViewMode.caption =
+    `[${WAIShowState[WAIOptions.showState]}] ` + `${WAIOptions.distance.min} -> ${WAIOptions.distance.max}`;
   statEntitiesTotal.caption = 'Entities in View Distance: ' + cacheInViewDist.size;
   statEntitiesOnScreen.caption = 'Entities on screen: ' + entitiesOnScreen.size;
   statsContainer.draw();

@@ -23,6 +23,11 @@ const command = async (_source: number, args: string[], _raw: string) => {
     return ChatSelf(`'${modelName}' is not a valid model`);
   }
 
+  newCar.AreLightsOn = true;
+  newCar.AreBrakeLightsOn = true;
+  newCar.IsEngineRunning = true;
+  newCar.NumberPlate = `${Game.Player.Name}`;
+  newCar.placeOnGround();
   ped.setIntoVehicle(newCar, VehicleSeat.Driver);
 
   // Allow the game engine to clean up the vehicle and model if needed

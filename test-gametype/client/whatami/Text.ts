@@ -6,9 +6,9 @@ import { WAIOptions } from './Options';
 /*ignores next block (aka function)*/
 const commonTextParams = (cacher: CachedEntity, pedDistance: number, color: string) => [
   `${color}Hash(ID):~b~ ${(cacher.original as Entity).Model.Hash} ~w~(~t~${cacher.original.Handle}~w~)`,
-  // `${color}Coords:~b~ ${cacher.original.Position.x.toFixed(3)} ~t~/~b~ ${cacher.original.Position.y.toFixed(
-  //   3
-  // )} ~t~/~b~ ${cacher.original.Position.z.toFixed(3)}`,
+  `${color}Coords:~b~ ${cacher.original.Position.x.toFixed(3)} ~t~/~b~ ${cacher.original.Position.y.toFixed(
+    3
+  )} ~t~/~b~ ${cacher.original.Position.z.toFixed(3)}`,
   `${color}Distance:~b~ ${pedDistance.toFixed(3)}`
 ];
 

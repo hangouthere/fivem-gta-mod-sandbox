@@ -33,6 +33,5 @@ RegisterCommand('-show-radar', cmdRadar, false);
 RegisterKeyMapping('-show-radar', 'Show Your Radar on Screen', 'keyboard', 'U');
 
 setTimeout(() => {
-  removeSuggestion('-show-money');
-  removeSuggestion('-show-radar');
-}, 500);
+  ['-show-money', '-show-radar'].forEach(removeSuggestion);
+}, 1000);
