@@ -1,4 +1,4 @@
-import { addSuggestion, Chat, removeSuggestion } from '../utils/Messaging.js';
+import { addSuggestion, ChatSelf, removeSuggestion } from '../utils/Messaging.js';
 import { StartJobs, StopJobs } from './Jobs.js';
 import {
   adjustViewDistance,
@@ -48,9 +48,9 @@ export const Register = async () => {
 
   StartJobs();
 
-  Chat('--------------------------------------');
-  Chat('[WhatAmI] Enabled!');
-  Chat("  Be sure you've set up the keybinds for this Resource or you won't have much use out of it!");
+  ChatSelf('--------------------------------------');
+  ChatSelf('[WhatAmI] Enabled!');
+  ChatSelf("  Be sure you've set up the keybinds for this Resource or you won't have much use out of it!");
 };
 
 export const Unregister = () => {
@@ -59,5 +59,5 @@ export const Unregister = () => {
   IsActive = false;
 
   removeSuggestion('whatami_vdi');
-  Chat('[WhatAmI] Disabled');
+  ChatSelf('[WhatAmI] Disabled');
 };

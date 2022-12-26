@@ -1,10 +1,10 @@
 import { Game } from '@nativewrappers/client';
-import { addSuggestion, Chat } from '../../utils/Messaging.js';
+import { addSuggestion, ChatSelf } from '../../utils/Messaging.js';
 
 const command = async (_source: number, _args: string[], _raw: string) => {
-  Chat(`Players Online: (${GetNumberOfPlayers()})`);
+  ChatSelf(`Players Online: (${GetNumberOfPlayers()})`);
   for (let player of Game.playerList()) {
-    Chat(` * ${player.Name}`);
+    ChatSelf(` * ${player.Name}`);
   }
 };
 

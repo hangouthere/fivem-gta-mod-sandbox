@@ -1,4 +1,5 @@
 import { Hud, Wait } from '@nativewrappers/client';
+import { removeSuggestion } from '../../utils/Messaging.js';
 
 export {};
 
@@ -25,8 +26,13 @@ const cmdRadar = async () => {
   Hud.IsRadarVisible = toggleRadar;
 };
 
-RegisterCommand('/show-money', cmdMoney, false);
-RegisterKeyMapping('/show-money', 'Show Your Money on Screen', 'keyboard', 'M');
+RegisterCommand('-show-money', cmdMoney, false);
+RegisterKeyMapping('-show-money', 'Show Your Money on Screen', 'keyboard', 'M');
 
-RegisterCommand('/show-radar', cmdRadar, false);
-RegisterKeyMapping('/show-radar', 'Show Your Radar on Screen', 'keyboard', 'U');
+RegisterCommand('-show-radar', cmdRadar, false);
+RegisterKeyMapping('-show-radar', 'Show Your Radar on Screen', 'keyboard', 'U');
+
+setTimeout(() => {
+  removeSuggestion('-show-money');
+  removeSuggestion('-show-radar');
+}, 500);

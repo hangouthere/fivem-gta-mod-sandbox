@@ -1,8 +1,8 @@
 import { Game, Vector3 } from '@nativewrappers/client';
 import { RandomPedModel } from './utils/Entities.js';
-import { Chat } from './utils/Messaging.js';
+import iconPlayerJoin from './utils/icons/icon-player-join.js';
+import { ChatAll, ChatSelf } from './utils/Messaging.js';
 import { ArrayRandom } from './utils/Misc';
-import { Register as RegisterWhatAmI } from './whatami/index.js';
 
 const WELCOMES = [
   'Welcome to the party,',
@@ -19,7 +19,7 @@ const WalkToOffset = SpawnOpts.add(new Vector3(-1, -3, 0));
 
 const onSpawn = async () => {
   const chosenMsg = ArrayRandom(WELCOMES);
-  //
+
   // Make character walk forward
   TaskGoStraightToCoord(
     Game.PlayerPed.Handle,
@@ -36,7 +36,8 @@ const onSpawn = async () => {
 
   Game.Player.PvPEnabled = true;
 
-  Chat(`${chosenMsg} ${Game.Player.Name}`);
+  ChatAll("Say Hi to me, I'm important!");
+  ChatSelf(`${chosenMsg} ${Game.Player.Name}`, 'nfg-player-joined');
 };
 
 const setupSpawner = () => {
@@ -54,12 +55,26 @@ const setupSpawner = () => {
   });
 
   globalThis.exports.spawnmanager.setAutoSpawn(true);
-  // globalThis.exports.spawnmanager.forceRespawn();
+
+  // If we're at 0,0,0 (aka fresh connect as Michael), force a spawn!
+  if (Game.PlayerPed.Position.distance(Vector3.Zero) <= 1) {
+    globalThis.exports.spawnmanager.forceRespawn();
+
+    ShutdownLoadingScreenNui(); // Just in case
+  }
+};
+
+const setupChat = () => {
+  emit(
+    'chat:addTemplate',
+    'nfg-player-joined',
+    `<span class="nfg-player-joined">${iconPlayerJoin}<span class="nfg-player-name">{0}:</span> <span class="nfg-player-message">{1}</span></span>`
+  );
 };
 
 export const bootstrapGameType = async () => {
   setupSpawner();
-  RegisterWhatAmI();
+  setupChat();
 
   console.log('[Sandbox] Mod Started:', new Date());
 };

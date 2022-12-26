@@ -1,5 +1,5 @@
 import { Game, Maths, Model, Vehicle, VehicleHash, VehicleSeat, World } from '@nativewrappers/client';
-import { Chat } from '../../utils/Messaging.js';
+import { ChatSelf } from '../../utils/Messaging.js';
 
 const command = async (_source: number, args: string[], _raw: string) => {
   const modelName = args[0];
@@ -20,7 +20,7 @@ const command = async (_source: number, args: string[], _raw: string) => {
   }
 
   if (!newCar) {
-    return Chat(`'${modelName}' is not a valid model`);
+    return ChatSelf(`'${modelName}' is not a valid model`);
   }
 
   ped.setIntoVehicle(newCar, VehicleSeat.Driver);
@@ -28,7 +28,7 @@ const command = async (_source: number, args: string[], _raw: string) => {
   // Allow the game engine to clean up the vehicle and model if needed
   newCar.IsMissionEntity = false;
 
-  Chat(`Enjoy your new ${newCar.DisplayName}, ${Game.Player.Name}`);
+  ChatSelf(`Enjoy your new ${newCar.DisplayName}, ${Game.Player.Name}`);
 };
 
 RegisterCommand('givecar', command, false);

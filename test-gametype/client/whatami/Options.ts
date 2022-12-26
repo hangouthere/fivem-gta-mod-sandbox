@@ -1,5 +1,6 @@
-import { Entity, Game } from '@nativewrappers/client';
-import { Chat } from '../utils/Messaging.js';
+import { Game } from '@nativewrappers/client';
+import { CachedEntity } from '../utils/CachedEntity.js';
+import { ChatSelf } from '../utils/Messaging.js';
 import { Clamp } from '../utils/Misc';
 import { IsActive } from './index.js';
 import { job_detectInView } from './Jobs.js';
@@ -13,10 +14,10 @@ export enum WAIShowState {
 
 //TODO: Fix these b0rked testing defaults
 const DEFAULT_OPTS = {
-  showState: WAIShowState.Props,
+  showState: WAIShowState.Vehicles,
   distance: {
     min: 0,
-    max: 100,
+    max: 500,
     // max: 10,
     // incrementer: 5
     incrementer: 100
@@ -41,8 +42,8 @@ const DEFAULT_OPTS = {
 
 export let WAIOptions = JSON.parse(JSON.stringify(DEFAULT_OPTS)) as typeof DEFAULT_OPTS;
 
-export const isInViewDistance = (target: Entity): [boolean, number] => {
-  const dist = Game.PlayerPed.Position.distance(target.Position);
+export const isInViewDistance = (cacher: CachedEntity): [boolean, number] => {
+  const dist = Game.PlayerPed.Position.distance(cacher.cached.Position);
   const isInViewDistance = dist >= WAIOptions.distance.min && dist <= WAIOptions.distance.max;
 
   return [isInViewDistance, dist];
@@ -51,7 +52,7 @@ export const isInViewDistance = (target: Entity): [boolean, number] => {
 export const resetOptions = () => {
   WAIOptions = JSON.parse(JSON.stringify(DEFAULT_OPTS));
 
-  Chat(`[WhatAmI] Reset all settings to their defaults!`);
+  ChatSelf(`[WhatAmI] Reset all settings to their defaults!`);
 };
 
 export const adjustViewDistance = (offset: number = 1, isMax = true) => {
@@ -73,7 +74,7 @@ export const adjustViewDistance = (offset: number = 1, isMax = true) => {
 
   job_detectInView();
 
-  Chat(`[WhatAmI] ${label} View Distance set to ${WAIOptions.distance[maxOrMin]} (${offset})`);
+  ChatSelf(`[WhatAmI] ${label} View Distance set to ${WAIOptions.distance[maxOrMin]} (${offset})`);
 };
 
 export const changeViewDistanceIncrementer = (offset: number = 1) => {
@@ -83,7 +84,7 @@ export const changeViewDistanceIncrementer = (offset: number = 1) => {
 
   WAIOptions.distance.incrementer += offset;
 
-  Chat(`[WhatAmI] View Distance Incrementer set to ${WAIOptions.distance.incrementer}`);
+  ChatSelf(`[WhatAmI] View Distance Incrementer set to ${WAIOptions.distance.incrementer}`);
 
   // Show on screen?
 };
@@ -103,7 +104,7 @@ export const rotateShowState = (forward: boolean) => {
 
   job_detectInView();
 
-  Chat(
+  ChatSelf(
     `[WhatAmI] Tracking ${WAIShowState[nextState]} between ${WAIOptions.distance.min} and ${WAIOptions.distance.max} units`
   );
 };

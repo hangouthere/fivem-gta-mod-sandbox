@@ -12,7 +12,7 @@ import {
   Vehicle,
   World
 } from '@nativewrappers/client';
-import { CachedEntity } from '../utils/CacheableEntities/test.js';
+import { CachedEntity } from '../utils/CachedEntity.js';
 import { getAllPickups } from '../utils/Entities.js';
 import { JobManager } from '../utils/Jobs.js';
 import { removeSuggestion } from '../utils/Messaging.js';
@@ -25,7 +25,7 @@ import { quickTextParams } from './Text';
 const lightColor = new Color(255, 255, 0, 255);
 
 type EntityCache = {
-  entity: Entity;
+  cacher: CachedEntity;
   pedDistance: number;
 };
 
@@ -35,8 +35,8 @@ type OnScreenEntity = {
 };
 
 let targetedEntity: EntityCache;
-let entitiesInViewDist: EntityCache[] = [];
-let entitiesOnScreen: OnScreenEntity[] = [];
+let cacheInViewDist: Set<EntityCache> = new Set();
+let entitiesOnScreen: Set<OnScreenEntity> = new Set();
 
 let jobMgr: JobManager | null;
 
@@ -44,8 +44,8 @@ export const StartJobs = () => {
   jobMgr = new JobManager();
 
   job_clearCommands();
-  jobMgr.registerJob(job_detectInView, 5000);
-  jobMgr.registerJob(job_detectOnScreen, 20);
+  jobMgr.registerJob(job_detectInView, 1000);
+  jobMgr.registerJob(job_detectOnScreen, 30);
   jobMgr.registerJob(job_drawEntityInfo);
   jobMgr.registerJob(job_drawStats);
 };
@@ -82,19 +82,19 @@ const job_clearCommands = () => {
 
 export const job_detectInView = async () => {
   // Choose an Entity Group to iterate over
-  const entityList: Entity[] = {
+  const entityCachers: CachedEntity[] = {
     [WAIShowState.Props]: World.getAllProps(),
     [WAIShowState.Peds]: World.getAllPeds(),
     [WAIShowState.Pickups]: getAllPickups(),
     [WAIShowState.Vehicles]: World.getAllVehicles()
-  }[WAIOptions.showState].map(e => new CachedEntity(e).cached);
+  }[WAIOptions.showState].map(e => new CachedEntity(e));
 
-  entitiesInViewDist = [];
+  cacheInViewDist.clear();
 
   // For every Entity...
-  for (let entity of entityList) {
-    const [inDistanceOfPed, pedDistance] = isInViewDistance(entity);
-    const entCache = { entity, pedDistance };
+  for (let entityCacher of entityCachers) {
+    const [inDistanceOfPed, pedDistance] = isInViewDistance(entityCacher);
+    const entCache = { cacher: entityCacher, pedDistance };
 
     // Don't process if the Entity isn't in the View Distance of the Ped
     if (!inDistanceOfPed) {
@@ -102,11 +102,11 @@ export const job_detectInView = async () => {
     }
 
     // Update Closest/Tracked Entity, but skip self
-    if (entity.Handle !== Game.PlayerPed.Handle) {
+    if (entityCacher.cached.Handle !== Game.PlayerPed.Handle) {
       targetedEntity = !targetedEntity || pedDistance < targetedEntity.pedDistance ? entCache : targetedEntity;
     }
 
-    entitiesInViewDist.push(entCache);
+    cacheInViewDist.add(entCache);
   }
 };
 
@@ -117,14 +117,14 @@ export const job_detectOnScreen = async () => {
     max: WAIOptions.distance.max
   };
 
-  entitiesOnScreen = [];
+  entitiesOnScreen.clear();
 
   // For every Entity...
-  for (let entityCache of entitiesInViewDist) {
+  for (let cache of cacheInViewDist) {
     // Determine starting data for text
     const fovScaledParams = GetFovScaledParams(
-      entityCache.entity.Position,
-      entityCache.pedDistance,
+      cache.cacher.original.Position,
+      cache.pedDistance,
       mmBounds,
       WAIOptions.fontScale,
       WAIOptions.alpha
@@ -134,9 +134,9 @@ export const job_detectOnScreen = async () => {
       continue;
     }
 
-    entitiesOnScreen.push({
+    entitiesOnScreen.add({
       fovScaledParams,
-      entityCache
+      entityCache: cache
     });
   }
 };
@@ -148,81 +148,89 @@ const job_drawEntityInfo = async () => {
 
   for (let {
     fovScaledParams,
-    entityCache: { entity, pedDistance }
+    entityCache: { cacher, pedDistance }
   } of entitiesOnScreen) {
+    if (!cacher.original.exists()) {
+      continue;
+    }
+
     // Depending on which option is shown, we want to display common information, with additional pertinent information
     switch (WAIOptions.showState) {
       case WAIShowState.Peds:
-        if (!(entity instanceof Ped)) {
+        if (!(cacher.cached instanceof Ped)) {
           break;
         }
+
+        const ped = cacher.original as Ped;
 
         // Define some offsets for a tighter design
         zOffsetLight = 2;
         radiusLight = 10;
         offsetScaleVector = {
           ...fovScaledParams,
-          screen3dTo2d: new Point(fovScaledParams.screen3dTo2d.X - 0.05, fovScaledParams.screen3dTo2d.Y - 0.2)
+          screen3dTo2d: new Point(fovScaledParams.screen3dTo2d!.X - 0.05, fovScaledParams.screen3dTo2d!.Y - 0.2)
         };
 
         // Display the text with quick options
-        const isArmed = IsPedArmed(entity.Handle, 1 + 2 + 4);
-        quickTextParams(offsetScaleVector, entity, pedDistance, '~o~', [
-          `~o~Cash:~b~ ${entity.Money} ~o~Armed?: ${isArmed ? '~r~Yes~s~' : '~t~No~s~'}`
+        const isArmed = IsPedArmed(cacher.cached.Handle, 1 + 2 + 4);
+        quickTextParams(offsetScaleVector, cacher, pedDistance, '~o~', [
+          `~o~Cash:~b~ ${ped.Money} ~o~Armed?: ${isArmed ? '~r~Yes~s~' : '~t~No~s~'}`
         ]);
 
         break;
 
       case WAIShowState.Vehicles:
-        if (!(entity instanceof Vehicle)) {
+        if (!(cacher.cached instanceof Vehicle)) {
           break;
         }
+
+        const veh = cacher.original as Vehicle;
 
         // Define some offsets for a tighter design
         zOffsetLight = 8;
         radiusLight = 20;
         // Display the text with quick options
-        quickTextParams(fovScaledParams, entity, pedDistance, '~p~', [
-          `~p~DisplayName:~b~ ${entity.DisplayName}`,
-          `~p~Fuel:~b~ ${entity.FuelLevel} ~p~Health:~b~ ${entity.Health}`
+        quickTextParams(fovScaledParams, cacher, pedDistance, '~p~', [
+          `~p~DisplayName:~b~ ${cacher.cached.DisplayName}`,
+          `~p~Fuel:~b~ ${veh.FuelLevel} ~p~Health:~b~ ${veh.Health}`
         ]);
 
         break;
 
       case WAIShowState.Props:
-        if (!(entity instanceof Prop)) {
+        if (!(cacher.cached instanceof Prop)) {
           break;
         }
 
         // Define some offsets for a tighter design
         zOffsetLight = 0.5;
         // Display the text with quick options
-        quickTextParams(fovScaledParams, entity, pedDistance, '~p~', []);
+        quickTextParams(fovScaledParams, cacher, pedDistance, '~p~', []);
 
         break;
 
       case WAIShowState.Pickups:
-        if (!(entity instanceof Entity)) {
+        if (!(cacher.cached instanceof Entity)) {
           break;
         }
 
         // Define some offsets for a tighter design
         zOffsetLight = 0.5;
         // Display the text with quick options
-        quickTextParams(fovScaledParams, entity, pedDistance, '~p~', []);
+        quickTextParams(fovScaledParams, cacher, pedDistance, '~p~', []);
 
         break;
     }
   }
 
   // Mark closest entity to PlayerPed
-  if (targetedEntity) {
+  if (false && targetedEntity) {
     // prettier-ignore
     DrawSpotLightWithShadow(
       // Location, offset by zOffsetLight
-      targetedEntity.entity.Position.x,
-      targetedEntity.entity.Position.y,
-      targetedEntity.entity.Position.z + zOffsetLight,
+      targetedEntity.cacher.original.Position.x,
+      targetedEntity.cacher.original.Position.y,
+      targetedEntity.cacher.original.Position.z + zOffsetLight,
       // Point down
       0, 0, -1,
       lightColor.r,
@@ -243,7 +251,7 @@ const job_drawEntityInfo = async () => {
   }
 };
 
-const containerSize = new Size(300, 50);
+const containerSize = new Size(500, 150);
 const statsContainer = new Container(
   new Point(Screen.ScaledWidth - containerSize.width, Screen.Height - containerSize.height),
   containerSize,
@@ -254,7 +262,7 @@ const statEntitiesOnScreen = new Text('', new Point(5, 20), 0.5);
 statsContainer.addItem(statEntitiesTotal);
 statsContainer.addItem(statEntitiesOnScreen);
 const job_drawStats = async () => {
-  statEntitiesTotal.caption = 'Entities in View Distance: ' + entitiesInViewDist.length;
-  statEntitiesOnScreen.caption = 'Entities on screen: ' + entitiesOnScreen.length;
+  statEntitiesTotal.caption = 'Entities in View Distance: ' + cacheInViewDist.size;
+  statEntitiesOnScreen.caption = 'Entities on screen: ' + entitiesOnScreen.size;
   statsContainer.draw();
 };
