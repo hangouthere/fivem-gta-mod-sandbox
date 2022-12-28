@@ -57,7 +57,9 @@ const setupSpawner = () => {
   globalThis.exports.spawnmanager.setAutoSpawn(true);
 
   // If we're at 0,0,0 (aka fresh connect as Michael), force a spawn!
-  if (Game.PlayerPed.Position.distance(Vector3.Zero) <= 1) {
+  const playerZero = GetHashKey('player_zero');
+
+  if (playerZero === Game.PlayerPed.Model.Hash && Game.PlayerPed.Position.distance(Vector3.Zero) <= 1) {
     globalThis.exports.spawnmanager.forceRespawn();
 
     ShutdownLoadingScreenNui(); // Just in case

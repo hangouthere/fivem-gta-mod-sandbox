@@ -3,7 +3,7 @@ import { CachedEntity } from '../utils/CachedEntity.js';
 import { ChatSelf } from '../utils/Messaging.js';
 import { Clamp } from '../utils/Misc';
 import { IsActive } from './index.js';
-import { job_detectInView } from './Jobs.js';
+import { job_detectWithinViewDist } from './jobs/DetectWithinViewDist';
 
 export enum WAIShowState {
   Peds,
@@ -14,13 +14,11 @@ export enum WAIShowState {
 
 //TODO: Fix these b0rked testing defaults
 const DEFAULT_OPTS = {
-  showState: WAIShowState.Vehicles,
+  showState: WAIShowState.Peds,
   distance: {
     min: 0,
-    max: 500,
-    // max: 10,
-    // incrementer: 5
-    incrementer: 100
+    max: 10,
+    incrementer: 5
   },
   bounds: {
     min: 0,
@@ -72,7 +70,7 @@ export const adjustViewDistance = (offset: number = 1, isMax = true) => {
       : WAIOptions.distance.max - absOffset //inner-max
   );
 
-  job_detectInView();
+  job_detectWithinViewDist();
 
   ChatSelf(`[WhatAmI] ${label} View Distance set to ${WAIOptions.distance[maxOrMin]} (${offset})`);
 };
@@ -102,7 +100,7 @@ export const rotateShowState = (forward: boolean) => {
 
   WAIOptions.showState = nextState;
 
-  job_detectInView();
+  job_detectWithinViewDist();
 
   ChatSelf(
     `[WhatAmI] Tracking ${WAIShowState[nextState]} between ${WAIOptions.distance.min} and ${WAIOptions.distance.max} units`

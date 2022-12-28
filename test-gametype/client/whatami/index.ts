@@ -1,5 +1,5 @@
 import { addSuggestion, ChatSelf, removeSuggestion } from '../utils/Messaging.js';
-import { StartJobs, StopJobs } from './Jobs.js';
+import { StartJobs, StopJobs } from './jobs/index.js';
 import {
   adjustViewDistance,
   changeViewDistanceIncrementer,
