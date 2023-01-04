@@ -1,5 +1,5 @@
 import { Game, World } from '@nativewrappers/client';
-import { cacheInViewDist, EntityCache } from '.';
+import { entitiesInViewDist, EntityCache } from '.';
 import { CachedEntity } from '../../utils/CachedEntity.js';
 import { getAllPickups } from '../../utils/Entities.js';
 import { isInViewDistance, WAIOptions, WAIShowState } from '../Options.js';
@@ -15,7 +15,7 @@ export const job_detectWithinViewDist = async () => {
     [WAIShowState.Vehicles]: World.getAllVehicles()
   }[WAIOptions.showState].map(e => new CachedEntity(e));
 
-  cacheInViewDist.clear();
+  let foundEntities: EntityCache[] = [];
 
   // For every Entity...
   for (let entityCacher of entityCachers) {
@@ -32,6 +32,13 @@ export const job_detectWithinViewDist = async () => {
       targetedEntity = !targetedEntity || pedDistance < targetedEntity.pedDistance ? entCache : targetedEntity;
     }
 
-    cacheInViewDist.add(entCache);
+    foundEntities.push(entCache);
   }
+
+  // Do the sort!
+  let sortedEntities = [...foundEntities].sort((a, b) => (b.pedDistance < a.pedDistance ? -1 : 1));
+
+  // Store in our Set
+  entitiesInViewDist.clear();
+  sortedEntities.forEach(e => entitiesInViewDist.add(e));
 };

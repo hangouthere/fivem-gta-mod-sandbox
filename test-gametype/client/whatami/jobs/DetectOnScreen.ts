@@ -1,4 +1,4 @@
-import { cacheInViewDist, entitiesOnScreen } from '.';
+import { entitiesInViewDist, entitiesOnScreen } from '.';
 import { MinMax } from '../../utils/Misc.js';
 import { GetFovScaledParams } from '../../utils/Text';
 import { WAIOptions } from '../Options.js';
@@ -13,7 +13,7 @@ export const job_detectOnScreen = async () => {
   entitiesOnScreen.clear();
 
   // For every Entity...
-  for (let cache of cacheInViewDist) {
+  for (let cache of entitiesInViewDist) {
     // Determine starting data for text
     const fovScaledParams = GetFovScaledParams(
       cache.cacher.original.Position,

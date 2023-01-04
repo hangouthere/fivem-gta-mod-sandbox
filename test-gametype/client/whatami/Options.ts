@@ -12,7 +12,6 @@ export enum WAIShowState {
   Vehicles
 }
 
-//TODO: Fix these b0rked testing defaults
 const DEFAULT_OPTS = {
   showState: WAIShowState.Peds,
   distance: {
@@ -30,7 +29,7 @@ const DEFAULT_OPTS = {
   },
   fontScale: {
     min: 0.25,
-    max: 0.45
+    max: 0.525
   },
   textSettings: {
     height: 5,

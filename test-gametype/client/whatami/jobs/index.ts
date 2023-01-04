@@ -21,7 +21,7 @@ type OnScreenEntity = {
   fovScaledParams: FovScaledParams;
 };
 
-export let cacheInViewDist: Set<EntityCache> = new Set();
+export let entitiesInViewDist: Set<EntityCache> = new Set();
 export let entitiesOnScreen: Set<OnScreenEntity> = new Set();
 
 let jobMgr: JobManager | null;

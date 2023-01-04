@@ -27,8 +27,8 @@ const command = async (_source: number, args: string[], _raw: string) => {
   newCar.AreBrakeLightsOn = true;
   newCar.IsEngineRunning = true;
   newCar.NumberPlate = `${Game.Player.Name}`;
-  newCar.placeOnGround();
   ped.setIntoVehicle(newCar, VehicleSeat.Driver);
+  newCar.placeOnGround();
 
   // Allow the game engine to clean up the vehicle and model if needed
   newCar.IsMissionEntity = false;
