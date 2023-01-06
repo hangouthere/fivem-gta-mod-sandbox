@@ -1,6 +1,5 @@
-import { JobManager } from '../utils/Jobs.js';
-import { addSuggestion, Chat, removeSuggestion } from '../utils/Messaging.js';
-import { drawText } from './Jobs.js';
+import { addSuggestion, ChatSelf, removeSuggestion } from '../utils/Messaging.js';
+import { StartJobs, StopJobs } from './jobs/index.js';
 import {
   adjustViewDistance,
   changeViewDistanceIncrementer,
@@ -10,13 +9,9 @@ import {
 } from './Options.js';
 
 export let IsActive: Boolean = false;
-let jobMgr: JobManager | null;
 
 export const Register = async () => {
   IsActive = true;
-  jobMgr = new JobManager();
-
-  jobMgr.registerJob(drawText);
 
   RegisterCommand('whatami_vdi', changeViewDistanceIncrementer, false);
   addSuggestion('whatami_vdi', 'Set the View Distance incrementer.', [
@@ -51,43 +46,18 @@ export const Register = async () => {
   RegisterCommand('-wai_settings_reset', resetOptions, false);
   RegisterKeyMapping('-wai_settings_reset', 'Reset [WhatAmI] Settings to Defaults', 'keyboard', 'NUMPAD5');
 
-  clearCommands();
+  StartJobs();
 
-  Chat('--------------------------------------');
-  Chat('[WhatAmI] Enabled!');
-  Chat("  Be sure you've set up the keybinds for this Resource or you won't have much use out of it!");
-};
-
-const clearCommands = () => {
-  const stopThisJob = jobMgr!.registerJob(
-    async () => {
-      [
-        '-wai_view_type_left',
-        '-wai_view_type_right',
-        '-wai_viewdist_min_inc',
-        '-wai_viewdist_min_dec',
-        '-wai_viewdist_max_inc',
-        '-wai_viewdist_max_dec',
-        '-wai_viewdist_inc_inc',
-        '-wai_viewdist_inc_dec',
-        '-wai_settings_reset'
-      ].forEach(removeSuggestion);
-
-      stopThisJob();
-    },
-    500,
-    true
-  );
+  ChatSelf('--------------------------------------');
+  ChatSelf('[WhatAmI] Enabled!');
+  ChatSelf("  Be sure you've set up the keybinds for this Resource or you won't have much use out of it!");
 };
 
 export const Unregister = () => {
-  if (jobMgr) {
-    jobMgr.stopAllJobs();
-  }
+  StopJobs();
 
-  jobMgr = null;
   IsActive = false;
 
   removeSuggestion('whatami_vdi');
-  Chat('[WhatAmI] Disabled');
+  ChatSelf('[WhatAmI] Disabled');
 };

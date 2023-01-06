@@ -1,13 +1,13 @@
 import { Game, Vehicle, VehicleSeat } from '@nativewrappers/client';
 import { GetPedOrVehEntity, GetPlayerByName } from '../../utils/Entities.js';
-import { addSuggestion, Alert, Chat } from '../../utils/Messaging.js';
+import { addSuggestion, Alert, ChatSelf } from '../../utils/Messaging.js';
 
 const command = async (_source: number, args: string[], _raw: string) => {
   const [targetPlayerName] = args;
   const targetPlayer = GetPlayerByName(targetPlayerName);
 
   if (!targetPlayer) {
-    return Chat('Invalid Player Name: ' + targetPlayerName);
+    return ChatSelf('Invalid Player Name: ' + targetPlayerName);
   }
 
   const targetEntity = GetPedOrVehEntity(targetPlayer.Ped);
@@ -22,7 +22,7 @@ const command = async (_source: number, args: string[], _raw: string) => {
     if (ent.isSeatFree(VehicleSeat.Any)) {
       Game.PlayerPed.setIntoVehicle(ent, VehicleSeat.Any);
     } else {
-      Chat(`${targetPlayer.Name} is in a Vehicle without an available seat!`);
+      ChatSelf(`${targetPlayer.Name} is in a Vehicle without an available seat!`);
     }
   }
 };

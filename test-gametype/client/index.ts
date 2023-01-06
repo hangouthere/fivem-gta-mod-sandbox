@@ -1,5 +1,5 @@
-import './commands/index.js';
 import { bootstrapGameType } from './bootstrap.js';
+import './commands/index.js';
 import { JobManager } from './utils/Jobs.js';
 
 on('onClientGameTypeStart', bootstrapGameType);

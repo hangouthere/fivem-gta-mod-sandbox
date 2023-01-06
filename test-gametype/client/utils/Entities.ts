@@ -1,4 +1,4 @@
-import { Entity, Game, Ped } from '@nativewrappers/client';
+import { Entity, Game, Ped, Pickup } from '@nativewrappers/client';
 import { ArrayRandom } from './Misc.js';
 
 const AllPeds = [
@@ -30,12 +30,18 @@ export const GetPedOrVehEntity = (ped: Ped): Entity => {
   return ped.CurrentVehicle ?? ped;
 };
 
-// Copied from @native-wrappers/client, but changed to conform to Entity type
-export const getAllPickups = (): Entity[] => {
-  const handles: number[] = GetGamePool('CPickup');
-  const pickups: Entity[] = [];
+export class Pickup2 extends Pickup {
+  constructor(public Handle: number) {
+    super(Handle);
+  }
+}
 
-  handles.forEach(handle => pickups.push(new Entity(handle)));
+// Copied from @native-wrappers/client, but changed to conform to Entity type
+export const getAllPickups = (): Pickup2[] => {
+  const handles: number[] = GetGamePool('CPickup');
+  const pickups: Pickup2[] = [];
+
+  handles.forEach(handle => pickups.push(new Pickup2(handle)));
 
   return pickups;
 };

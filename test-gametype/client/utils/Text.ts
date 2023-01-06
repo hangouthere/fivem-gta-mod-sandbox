@@ -1,10 +1,5 @@
 import { Alignment, Color, Font, GameplayCamera, Point, Screen, Size, Text, Vector3 } from '@nativewrappers/client';
-import { Clamp } from './Misc';
-
-export type MinMax = {
-  min: number;
-  max: number;
-};
+import { Clamp, MinMax } from './Misc';
 
 export type LineSettings = {
   height: number;
@@ -13,9 +8,9 @@ export type LineSettings = {
 
 export type FovScaledParams = {
   onScreen: boolean;
-  screen3dTo2d: Point;
-  scale: number;
-  alpha: number;
+  screen3dTo2d?: Point;
+  scale?: number;
+  alpha?: number;
 };
 
 export const GetFovScaledParams = (
@@ -26,6 +21,13 @@ export const GetFovScaledParams = (
   mmAlpha: MinMax
 ): FovScaledParams => {
   const [onScreen, x, y] = World3dToScreen2d(target.x, target.y, target.z);
+
+  if (!onScreen) {
+    return {
+      onScreen
+    };
+  }
+
   const screen3dTo2d = new Point(x, y);
   const fov = (1 / GameplayCamera.FieldOfView) * 100;
 
@@ -63,7 +65,7 @@ export const DrawOnScreen3D = (
     return;
   }
 
-  const offsetPos = new Point(screen3dTo2d.X, screen3dTo2d.Y + offset);
+  const offsetPos = new Point(screen3dTo2d!.X, screen3dTo2d!.Y + offset);
 
   Text.draw(
     text,

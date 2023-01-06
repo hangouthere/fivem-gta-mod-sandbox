@@ -1,9 +1,21 @@
-export const Chat = (msg: string | string[]) => {
+import { Game } from '@nativewrappers/client';
+
+export const ChatSelf = (msg: string | string[], templateId?: string) => {
   console.log(msg);
 
+  const _msg = Array.isArray(msg) ? msg : [msg];
+  _msg.unshift(Game.Player.Name);
+
   emit('chat:addMessage', {
-    args: Array.isArray(msg) ? msg : [msg]
+    templateId,
+    args: _msg
   });
+};
+
+export const ChatAll = (msg: string | string[]) => {
+  console.log(msg);
+
+  emitNet('_chat:messageEntered', Game.Player.Name, null, Array.isArray(msg) ? msg : [msg], 'all');
 };
 
 export const Alert = (msg: string) => {

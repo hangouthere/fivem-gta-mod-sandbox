@@ -9,12 +9,9 @@ Add build proc as another container, use docker-compose profiles
 
 # WhatAmI
 
-* Needs more cleanup from prototype
-* Identify
-* Clean up text generation functions
-  * They feel too tied to the impl, needs to be generic enough to apply FOV text to any entity easily... Close, but not quite there yet
+* Sort by distance
+  * Consider drawing in batches to get EVERYTHING on screen? Or just limit to the first n-Entities?
 * Identify a better way to visualize targeted entity
-  * Store targeted entity beyond scope of current process.
 * More features!
   * Do things to aforementioend targeted entity!
     * Kill, tp, etc!

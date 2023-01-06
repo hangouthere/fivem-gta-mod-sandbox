@@ -2,16 +2,28 @@ import { Game } from '@nativewrappers/client';
 import { addSuggestion } from '../../utils/Messaging.js';
 
 const command = async (_source: number, args: string[], _raw: string) => {
-  console.log('Player IDs', Game.Player.Handle, Game.PlayerPed.Handle, Game.Player.ServerId);
-  console.log('DoesEntityExist?', Game.PlayerPed.exists());
-  console.log('IsPlayerDead?', Game.Player.IsDead);
-  console.log('IsEntityDead?', Game.PlayerPed.IsDead);
-  console.log('IsPedAPlayer?', Game.PlayerPed.IsPlayer);
-  console.log('IsPedHuman?', Game.PlayerPed.IsHuman);
-  console.log('IsEntityAttached?', Game.PlayerPed.isAttached());
-  console.log('IsEntityVisible?', Game.PlayerPed.IsVisible);
-  console.log('IsPlayerControlOn?', IsPlayerControlOn(Game.Player.Handle));
-  console.log('NetworkIsPlayerActive?', NetworkIsPlayerActive(Game.Player.Handle));
+  const ped = Game.PlayerPed;
+  const player = Game.Player;
+
+  console.log('Player IDs', player.Handle, player.ServerId, '|', ped.Handle);
+  console.log('NetworkIsGameInProgress?', NetworkIsGameInProgress());
+  console.log('NetworkIsPlayerAParticipant?', NetworkIsPlayerAParticipant(player.Handle));
+  console.log('NetworkIsPlayerInMpCutscene?', NetworkIsPlayerInMpCutscene(player.Handle));
+  console.log('IsPlayerSwitchInProgress?', IsPlayerSwitchInProgress());
+  console.log('IsPlayerPlaying?', IsPlayerPlaying(player.Handle));
+  console.log('IsPlayerDead?', player.IsDead);
+  console.log('IsPlayerInCutscene?', IsPlayerInCutscene(player.Handle));
+  console.log('IsPlayerControlOn?', IsPlayerControlOn(player.Handle));
+  console.log('NetworkIsPlayerActive?', NetworkIsPlayerActive(player.Handle));
+  console.log('--------------');
+  console.log('GetEntityHealth?', ped.Health);
+  console.log('DoesEntityExist?', ped.exists());
+  console.log('IsPedDeadOrDying ?', IsPedDeadOrDying(ped.Handle, true));
+  console.log('IsEntityDead?', ped.IsDead);
+  console.log('IsPedAPlayer?', ped.IsPlayer);
+  console.log('IsPedHuman?', ped.IsHuman);
+  console.log('IsEntityAttached?', ped.isAttached());
+  console.log('IsEntityVisible?', ped.IsVisible);
 };
 
 RegisterCommand('playerinfo', command, false);
